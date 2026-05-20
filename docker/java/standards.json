@@ -1,0 +1,24 @@
+{
+  "techStack": "java",
+  "baseImage": "eclipse-temurin:21-jre-alpine",
+  "packageManagers": ["maven", "gradle"],
+  "defaultPort": 8080,
+  "buildStages": ["builder", "runner"],
+  "rules": [
+    "Use multi-stage build — build with maven/gradle, run with JRE-only image",
+    "Use eclipse-temurin:XX-jre-alpine for the runtime stage (not full JDK)",
+    "Run as non-root user (appuser uid 1001)",
+    "Copy only the final JAR/WAR into the runner stage",
+    "Set JVM flags: -XX:+UseContainerSupport -XX:MaxRAMPercentage=75",
+    "Add HEALTHCHECK targeting /actuator/health or /health endpoint",
+    "Use EXPOSE to document the listening port"
+  ],
+  "hadlintIgnore": [],
+  "securityRequirements": [
+    "No credentials or .env files copied into the image",
+    "Add a .dockerignore that excludes target/, .git, *.class",
+    "Use JRE image (not JDK) in the runner stage",
+    "USER instruction must appear before CMD/ENTRYPOINT"
+  ],
+  "version": "1.0.0"
+}

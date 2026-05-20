@@ -1,0 +1,22 @@
+{
+  "structure": {
+    "baseDir": "base",
+    "overlaysDir": "overlays"
+  },
+  "namingConventions": {
+    "deployment": "{appName}",
+    "service": "{appName}",
+    "configmap": "{appName}-config"
+  },
+  "defaultEnvironments": ["dev", "sit", "uat", "nft", "prod"],
+  "rules": [
+    "base/ must contain deployment.yaml, service.yaml, and kustomization.yaml",
+    "Each overlay must have its own kustomization.yaml referencing ../../base",
+    "Use namePrefix in each overlay to scope resource names per environment",
+    "Use commonLabels in base kustomization.yaml with app and version labels",
+    "Pin image tags in overlays — never use latest in any environment",
+    "Resource limits (cpu, memory) must be set in the base deployment",
+    "Liveness and readiness probes must be defined in the base deployment"
+  ],
+  "version": "1.0.0"
+}

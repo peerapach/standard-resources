@@ -1,0 +1,24 @@
+{
+  "techStack": "nodejs",
+  "baseImage": "node:20-alpine",
+  "packageManagers": ["npm", "yarn", "pnpm"],
+  "defaultPort": 3000,
+  "buildStages": ["base", "deps", "builder", "runner"],
+  "rules": [
+    "Use multi-stage builds to minimise final image size",
+    "Run as non-root user (nodeuser uid 1001)",
+    "Pin base image to a specific major version tag",
+    "Use npm ci for deterministic installs",
+    "Copy only built artefacts into the runner stage",
+    "Add HEALTHCHECK targeting /health endpoint",
+    "Use EXPOSE to document the listening port"
+  ],
+  "hadlintIgnore": [],
+  "securityRequirements": [
+    "No secrets or .env files copied into the image",
+    "Add a .dockerignore that excludes node_modules and .git",
+    "Use node:XX-alpine (not latest or slim) to minimise attack surface",
+    "USER instruction must appear before CMD/ENTRYPOINT"
+  ],
+  "version": "1.0.0"
+}

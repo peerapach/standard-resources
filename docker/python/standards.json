@@ -1,0 +1,24 @@
+{
+  "techStack": "python",
+  "baseImage": "python:3.12-slim",
+  "packageManagers": ["pip", "poetry", "pipenv"],
+  "defaultPort": 8000,
+  "buildStages": ["base", "builder", "runner"],
+  "rules": [
+    "Use multi-stage builds — install deps in builder, copy /install into runner",
+    "Set PYTHONDONTWRITEBYTECODE=1 and PYTHONUNBUFFERED=1 in base stage",
+    "Run as non-root user (appuser uid 1001)",
+    "Use pip install --no-cache-dir to keep image size down",
+    "Copy requirements.txt before source code to leverage layer cache",
+    "Add HEALTHCHECK targeting /health endpoint",
+    "Use EXPOSE to document the listening port"
+  ],
+  "hadlintIgnore": ["DL3042"],
+  "securityRequirements": [
+    "No .env or credentials files copied into the image",
+    "Add a .dockerignore that excludes __pycache__, .git, .venv",
+    "Use python:X.Y-slim (not latest or full) to minimise attack surface",
+    "USER instruction must appear before CMD/ENTRYPOINT"
+  ],
+  "version": "1.0.0"
+}

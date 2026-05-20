@@ -1,0 +1,23 @@
+{
+  "techStack": "golang",
+  "baseImage": "golang:1.22-alpine",
+  "packageManagers": ["go modules"],
+  "defaultPort": 8080,
+  "buildStages": ["builder", "runner"],
+  "rules": [
+    "Use multi-stage build — compile in golang:X-alpine, final stage FROM scratch",
+    "Set CGO_ENABLED=0 GOOS=linux for a fully static binary",
+    "Copy only the compiled binary and CA certificates into the final stage",
+    "Copy go.mod and go.sum before source code to leverage module cache",
+    "Add HEALTHCHECK using the binary's own health flag",
+    "Use EXPOSE to document the listening port"
+  ],
+  "hadlintIgnore": ["DL3002"],
+  "securityRequirements": [
+    "Final stage must be FROM scratch or distroless — no shell",
+    "No secrets or .env files in the build context",
+    "Add a .dockerignore that excludes .git and local test artefacts",
+    "Binary must not run as root (use distroless nonroot if scratch is not feasible)"
+  ],
+  "version": "1.0.0"
+}
