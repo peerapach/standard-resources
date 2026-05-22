@@ -1,0 +1,32 @@
+[
+  {
+    "tags": ["upload", "401", "unauthorized"],
+    "q": "Artifact upload to Artifactory fails with 401 Unauthorized",
+    "a": "Token expired or wrong credentials. Generate a new Access Token in Artifactory → Administration → Identity and Access → Access Tokens. Grant the token 'Deploy/Cache' permission on the target repository. Use `jf config add` to store the token securely instead of hardcoding."
+  },
+  {
+    "tags": ["upload", "403", "forbidden"],
+    "q": "Upload returns 403 Forbidden even with valid credentials",
+    "a": "The user/token lacks Deploy permission on that specific repository. Check: Artifactory → Repositories → <repo> → Permissions. Also verify you're deploying to a Local repo (not Virtual or Remote). If the repo has 'Exclude Patterns', your artifact path may be blocked."
+  },
+  {
+    "tags": ["docker", "pull", "push", "registry"],
+    "q": "Docker push/pull to Artifactory fails with 'unauthorized'",
+    "a": "Run `docker login <artifactory-url>` with valid credentials first. For CI: use `docker login -u $USER -p $TOKEN $REGISTRY`. Ensure the Docker repo in Artifactory is type 'Docker' and the virtual repo includes it. Check that the repository path format matches: `<artifactory-url>/<docker-repo>/<image>:<tag>`."
+  },
+  {
+    "tags": ["download", "404", "not-found"],
+    "q": "Artifact download returns 404 even though the artifact exists",
+    "a": "Check: 1) You're downloading from a Virtual repo that includes the repo containing the artifact. 2) The path is exactly correct (case-sensitive). 3) The artifact wasn't deleted or moved. 4) Your token has Read permission. Use Artifactory UI to verify the exact path before scripting."
+  },
+  {
+    "tags": ["cleanup", "retention", "delete"],
+    "q": "How do I clean up old artifacts in Artifactory automatically?",
+    "a": "Use the Artifact Cleanup plugin (Administration → Plugins) or configure Custom Policies. For bulk deletion via CLI: `jf rt del \"repo-name/path/**\" --quiet --dry-run` first, then remove `--dry-run`. Use AQL for complex queries: `jf rt s --spec=query.json`. Never delete without a dry-run first."
+  },
+  {
+    "tags": ["build-info", "traceability", "ci"],
+    "q": "How do I link artifacts to CI builds for traceability?",
+    "a": "Use JFrog CLI build integration: 1) `jf rt u` with `--build-name` and `--build-number`. 2) Collect env: `jf rt bce`. 3) Publish: `jf rt bp <build-name> <build-number>`. Build info is then searchable in Artifactory and links artifacts back to the pipeline run."
+  }
+]

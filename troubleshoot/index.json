@@ -1,0 +1,26 @@
+{
+  "jenkins": {
+    "knowledge": ["jenkins.md"],
+    "qa": ["jenkins.json"]
+  },
+  "sonarqube": {
+    "knowledge": ["sonarqube.md"],
+    "qa": ["sonarqube.json"]
+  },
+  "jfrog": {
+    "knowledge": ["jfrog.md"],
+    "qa": ["jfrog.json"]
+  },
+  "kubernetes": {
+    "knowledge": ["kubernetes.md"],
+    "qa": ["kubernetes.json"]
+  },
+  "openshift": {
+    "knowledge": ["openshift.md"],
+    "qa": ["openshift.json"]
+  },
+  "unknown": {
+    "knowledge": ["jenkins.md", "kubernetes.md"],
+    "qa": ["jenkins.json", "kubernetes.json"]
+  }
+}

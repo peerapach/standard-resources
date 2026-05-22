@@ -1,0 +1,32 @@
+[
+  {
+    "tags": ["scc", "permission", "root", "security"],
+    "q": "Pod fails to start with 'unable to validate against any security context constraint'",
+    "a": "The container requires privileges that no SCC allows. Options: 1) Fix the image to run as non-root (best). 2) Grant anyuid SCC to the service account: `oc adm policy add-scc-to-serviceaccount anyuid -z <serviceaccount> -n <namespace>` (requires cluster-admin). 3) Use a custom SCC that allows only the specific UID the image needs."
+  },
+  {
+    "tags": ["route", "ingress", "404", "not-found"],
+    "q": "OpenShift Route returns 404 for my application",
+    "a": "Check: 1) Route selector matches the correct Service: `oc get route <name> -o yaml`. 2) The Service is pointing to running pods: `oc get endpoints <service>`. 3) The app is listening on the port defined in the Route's `targetPort`. 4) For path-based routing, ensure the app handles the subpath correctly."
+  },
+  {
+    "tags": ["imagestream", "pull", "stale"],
+    "q": "ImageStream is not pulling the latest image from the external registry",
+    "a": "Enable scheduled import: `oc tag <source>:<tag> <imagestream>:<tag> --scheduled=true`. Or trigger manually: `oc import-image <imagestream>:<tag> --from=<source> --confirm`. Ensure pull secret for the external registry is linked to the service account: `oc secrets link <sa> <pull-secret> --for=pull`."
+  },
+  {
+    "tags": ["quota", "limit", "exceeded"],
+    "q": "Pod can't be created due to quota exceeded",
+    "a": "`oc describe quota -n <namespace>` to see current usage vs limits. Options: 1) Reduce resource requests in your deployment. 2) Delete unused resources (pods, PVCs, services). 3) Request a quota increase from the cluster admin. Common culprits: too many replicas, large memory requests, orphaned PVCs."
+  },
+  {
+    "tags": ["deployment-config", "trigger", "imagechange"],
+    "q": "DeploymentConfig triggers a new deployment every time even without code changes",
+    "a": "An image change trigger fires when the ImageStream tag is updated. If the base image is updated in the registry, it triggers redeployment — this is by design. To prevent unwanted redeploys: 1) Pin to a digest instead of a tag. 2) Disable the image change trigger if it's causing issues: `oc set triggers dc/<name> --remove-all`."
+  },
+  {
+    "tags": ["filesystem", "permission", "volume", "mount"],
+    "q": "Container gets 'permission denied' on a mounted volume",
+    "a": "OpenShift runs pods with a random UID. The volume ownership may not match. Fix: 1) Set `fsGroup` in pod securityContext to match the GID that owns the volume. 2) Use an init container to `chown` the mount path. 3) If using NFS, enable `no_root_squash` on the NFS server (last resort, security risk)."
+  }
+]

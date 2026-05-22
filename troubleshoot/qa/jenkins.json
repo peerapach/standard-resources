@@ -1,0 +1,37 @@
+[
+  {
+    "tags": ["build", "exit-code", "failure"],
+    "q": "My Jenkins pipeline fails with exit code 1 but I don't see an error message",
+    "a": "Look at the last shell step before the failure. Exit code 1 is a generic failure. Run the failing command locally with `set -x` to see each sub-command. Check if `set -e` is active (it stops on any error). Also check if a linter or test tool returned non-zero without printing to stdout."
+  },
+  {
+    "tags": ["docker", "permission", "agent"],
+    "q": "Jenkins can't run docker commands on the agent — permission denied",
+    "a": "Add the jenkins user to the docker group on the agent: `sudo usermod -aG docker jenkins` then restart the agent. Alternatively, use a Docker-in-Docker (DinD) sidecar or configure the agent to use rootless Docker."
+  },
+  {
+    "tags": ["credentials", "secret", "masked"],
+    "q": "How do I pass secrets securely in a Jenkins pipeline without them appearing in logs?",
+    "a": "Use `withCredentials([string(credentialsId: 'my-secret', variable: 'MY_SECRET')]) { ... }`. Jenkins automatically masks the value in logs. Never use `echo $MY_SECRET` — use it only as an argument to a command."
+  },
+  {
+    "tags": ["queue", "executor", "stuck"],
+    "q": "My build is stuck in the queue forever",
+    "a": "Check: 1) Is there an agent with the required label online? (Manage Jenkins → Nodes) 2) Is the agent at capacity? 3) Does the Jenkinsfile `agent { label 'X' }` label match exactly? 4) Check for builds that are hung and holding executors — abort them if needed."
+  },
+  {
+    "tags": ["shared-library", "groovy", "missing-method"],
+    "q": "Pipeline fails with groovy.lang.MissingMethodException for a shared library function",
+    "a": "The function doesn't exist in the library version being loaded. Check: 1) `@Library('my-lib@version')` — pin to a specific tag/branch. 2) The function is in `vars/` not `src/`. 3) The library is configured in Jenkins → System → Global Pipeline Libraries."
+  },
+  {
+    "tags": ["timeout", "hang", "infinite"],
+    "q": "My pipeline hangs and never finishes",
+    "a": "Wrap the build in a timeout: `timeout(time: 30, unit: 'MINUTES') { ... }`. Common causes: interactive prompt waiting for input (use `-y`/`--non-interactive` flags), docker pull rate limit, or a test that deadlocks. Check the build log for the last line printed before it hung."
+  },
+  {
+    "tags": ["workspace", "disk", "space"],
+    "q": "Agent runs out of disk space",
+    "a": "1) Add a post step: `post { always { cleanWs() } }`. 2) Enable Workspace Cleanup Plugin. 3) Run `docker system prune -f` regularly on agents. 4) Move artifact storage to Artifactory instead of keeping in workspace."
+  }
+]
