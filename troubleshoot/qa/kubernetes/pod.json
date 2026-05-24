@@ -1,37 +1,26 @@
 [
   {
     "tags": ["crashloopbackoff", "pod", "restart"],
+    "category": "pod",
     "q": "Pod is in CrashLoopBackOff — how do I find the root cause?",
     "a": "Run `kubectl logs <pod> --previous` to see the last crash output. Then `kubectl describe pod <pod>` to see exit code and events. Common causes: app exits non-zero (check app logs), OOMKilled (increase memory limit), missing env var or secret (check CreateContainerConfigError events), liveness probe killing the pod too early (increase initialDelaySeconds)."
   },
   {
     "tags": ["imagepullbackoff", "image", "registry"],
+    "category": "pod",
     "q": "Pod stuck in ImagePullBackOff",
     "a": "Check: 1) Image tag exists in the registry — pull it manually from a node. 2) ImagePullSecret is attached: `kubectl get pod <pod> -o yaml | grep imagePullSecrets`. 3) Create secret: `kubectl create secret docker-registry regcred --docker-server=... --docker-username=... --docker-password=...` and reference it in the ServiceAccount or pod spec."
   },
   {
     "tags": ["pending", "scheduling", "resources"],
+    "category": "pod",
     "q": "Pod stays in Pending state indefinitely",
     "a": "`kubectl describe pod <pod>` → Events section will explain why. Common reasons: 1) Insufficient CPU/memory — reduce requests or add nodes. 2) Node selector/affinity doesn't match any node. 3) PVC unbound — check `kubectl get pvc`. 4) Node has taint without matching toleration in pod spec."
   },
   {
-    "tags": ["service", "networking", "endpoint"],
-    "q": "Pods are running but the Service is not routing traffic",
-    "a": "`kubectl get endpoints <service>` — if empty, the selector doesn't match any pods. Verify: `kubectl get pods --show-labels` vs `kubectl get svc <service> -o yaml | grep selector`. Also check `targetPort` matches the container `containerPort`. Test from within the cluster: `kubectl run test --rm -it --image=alpine -- wget -O- http://<service>:<port>`."
-  },
-  {
     "tags": ["oom", "memory", "killed"],
+    "category": "pod",
     "q": "Container keeps getting OOMKilled",
     "a": "The container exceeded its memory limit. Fix: 1) Increase `resources.limits.memory` in the deployment. 2) Profile the app for memory leaks. 3) `kubectl top pod <pod>` to see current usage. 4) Check if the JVM needs `-Xmx` set — otherwise it may try to use all available memory."
-  },
-  {
-    "tags": ["deployment", "rollout", "stuck"],
-    "q": "Deployment rollout is stuck and not completing",
-    "a": "`kubectl rollout status deployment/<name>` shows progress. If stuck: 1) Check if new pods are crashing — `kubectl get pods`. 2) If maxUnavailable=0 and no spare capacity, new pods can't start. 3) Rollback: `kubectl rollout undo deployment/<name>`. 4) Check resource quotas — new pods may be blocked by quota."
-  },
-  {
-    "tags": ["configmap", "secret", "update"],
-    "q": "I updated a ConfigMap/Secret but the running pods don't see the new values",
-    "a": "Pods with env vars from ConfigMap/Secret do NOT hot-reload on changes. You must restart pods: `kubectl rollout restart deployment/<name>`. For volume-mounted configs, Kubernetes does eventually update the file (within ~1 minute), but the app must re-read it. Use a hash annotation trick to force rolling restart on config change."
   }
 ]

@@ -1,0 +1,8 @@
+[
+  {
+    "tags": ["service", "networking", "endpoint"],
+    "category": "networking",
+    "q": "Pods are running but the Service is not routing traffic",
+    "a": "`kubectl get endpoints <service>` — if empty, the selector doesn't match any pods. Verify: `kubectl get pods --show-labels` vs `kubectl get svc <service> -o yaml | grep selector`. Also check `targetPort` matches the container `containerPort`. Test from within the cluster: `kubectl run test --rm -it --image=alpine -- wget -O- http://<service>:<port>`."
+  }
+]

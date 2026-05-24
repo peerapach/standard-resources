@@ -1,0 +1,14 @@
+[
+  {
+    "tags": ["deployment", "rollout", "stuck"],
+    "category": "deployment",
+    "q": "Deployment rollout is stuck and not completing",
+    "a": "`kubectl rollout status deployment/<name>` shows progress. If stuck: 1) Check if new pods are crashing — `kubectl get pods`. 2) If maxUnavailable=0 and no spare capacity, new pods can't start. 3) Rollback: `kubectl rollout undo deployment/<name>`. 4) Check resource quotas — new pods may be blocked by quota."
+  },
+  {
+    "tags": ["configmap", "secret", "update"],
+    "category": "deployment",
+    "q": "I updated a ConfigMap/Secret but the running pods don't see the new values",
+    "a": "Pods with env vars from ConfigMap/Secret do NOT hot-reload on changes. You must restart pods: `kubectl rollout restart deployment/<name>`. For volume-mounted configs, Kubernetes does eventually update the file (within ~1 minute), but the app must re-read it. Use a hash annotation trick to force rolling restart on config change."
+  }
+]

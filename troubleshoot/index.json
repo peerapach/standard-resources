@@ -1,26 +1,27 @@
 {
+  "version": 2,
   "jenkins": {
-    "knowledge": ["jenkins.md"],
-    "qa": ["jenkins.json"]
+    "knowledge": ["jenkins/common.md"],
+    "qa": ["jenkins/pipeline.json", "jenkins/agent.json", "jenkins/security.json"]
   },
   "sonarqube": {
-    "knowledge": ["sonarqube.md"],
-    "qa": ["sonarqube.json"]
+    "knowledge": ["sonarqube/common.md"],
+    "qa": ["sonarqube/general.json"]
   },
   "jfrog": {
-    "knowledge": ["jfrog.md"],
-    "qa": ["jfrog.json"]
+    "knowledge": ["jfrog/common.md"],
+    "qa": ["jfrog/general.json"]
   },
   "kubernetes": {
-    "knowledge": ["kubernetes.md"],
-    "qa": ["kubernetes.json"]
+    "knowledge": ["kubernetes/common.md"],
+    "qa": ["kubernetes/pod.json", "kubernetes/networking.json", "kubernetes/deployment.json"]
   },
   "openshift": {
-    "knowledge": ["openshift.md"],
-    "qa": ["openshift.json"]
+    "knowledge": ["openshift/common.md"],
+    "qa": ["openshift/general.json"]
   },
   "unknown": {
-    "knowledge": ["jenkins.md", "kubernetes.md"],
-    "qa": ["jenkins.json", "kubernetes.json"]
+    "knowledge": ["jenkins/common.md", "kubernetes/common.md"],
+    "qa": ["jenkins/pipeline.json", "kubernetes/pod.json"]
   }
 }

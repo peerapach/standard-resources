@@ -1,0 +1,20 @@
+[
+  {
+    "tags": ["docker", "permission", "agent"],
+    "category": "agent",
+    "q": "Jenkins can't run docker commands on the agent — permission denied",
+    "a": "Add the jenkins user to the docker group on the agent: `sudo usermod -aG docker jenkins` then restart the agent. Alternatively, use a Docker-in-Docker (DinD) sidecar or configure the agent to use rootless Docker."
+  },
+  {
+    "tags": ["queue", "executor", "stuck"],
+    "category": "agent",
+    "q": "My build is stuck in the queue forever",
+    "a": "Check: 1) Is there an agent with the required label online? (Manage Jenkins → Nodes) 2) Is the agent at capacity? 3) Does the Jenkinsfile `agent { label 'X' }` label match exactly? 4) Check for builds that are hung and holding executors — abort them if needed."
+  },
+  {
+    "tags": ["workspace", "disk", "space"],
+    "category": "agent",
+    "q": "Agent runs out of disk space",
+    "a": "1) Add a post step: `post { always { cleanWs() } }`. 2) Enable Workspace Cleanup Plugin. 3) Run `docker system prune -f` regularly on agents. 4) Move artifact storage to Artifactory instead of keeping in workspace."
+  }
+]

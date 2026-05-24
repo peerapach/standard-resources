@@ -1,0 +1,62 @@
+[
+  {
+    "tags": [
+      "quality-gate",
+      "failed",
+      "new-code"
+    ],
+    "q": "Quality Gate fails on new code but the issues are in old files I didn't touch",
+    "a": "SonarQube's New Code period may be misconfigured. Go to Project \u2192 Administration \u2192 New Code and set it to 'Previous version' or 'Reference branch'. Ensure `sonar.newCode.referenceBranch` is set in your scanner properties to the correct base branch (e.g., main).",
+    "category": "general"
+  },
+  {
+    "tags": [
+      "coverage",
+      "zero",
+      "missing"
+    ],
+    "q": "Coverage shows 0% in SonarQube even though tests pass and generate a report",
+    "a": "The scanner cannot find the coverage report. Set the correct path: `sonar.python.coverage.reportPaths=coverage.xml` or `sonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml`. Run tests BEFORE the scanner. Verify the report file actually exists at the configured path.",
+    "category": "general"
+  },
+  {
+    "tags": [
+      "authentication",
+      "401",
+      "token"
+    ],
+    "q": "Scanner fails with 401 Unauthorized",
+    "a": "The token is invalid or expired. Generate a new Project Analysis Token in SonarQube \u2192 My Account \u2192 Security. Pass it via `SONAR_TOKEN` env var (not `SONAR_LOGIN` which is deprecated). Ensure the token has 'Execute Analysis' permission on the project.",
+    "category": "general"
+  },
+  {
+    "tags": [
+      "connection",
+      "server",
+      "unreachable"
+    ],
+    "q": "Scanner cannot connect to the SonarQube server",
+    "a": "Check: 1) `SONAR_HOST_URL` is correct and reachable from the CI agent (curl test). 2) TLS certificate is trusted \u2014 add CA cert to the JVM truststore if using self-signed. 3) Firewall/proxy: set `sonar.scanner.proxyHost` and `sonar.scanner.proxyPort` if behind a proxy.",
+    "category": "general"
+  },
+  {
+    "tags": [
+      "pull-request",
+      "decoration",
+      "missing"
+    ],
+    "q": "PR decoration (inline comments) is not appearing in my Git provider",
+    "a": "Requires: 1) Developer Edition or higher. 2) ALM integration configured in SonarQube \u2192 Administration \u2192 ALM Integrations. 3) Pipeline sets `sonar.pullrequest.key`, `sonar.pullrequest.branch`, `sonar.pullrequest.base`. 4) The ALM token has permission to write comments on PRs.",
+    "category": "general"
+  },
+  {
+    "tags": [
+      "performance",
+      "slow",
+      "heap"
+    ],
+    "q": "SonarQube scanner is very slow or runs out of memory",
+    "a": "Increase scanner heap: set env var `SONAR_SCANNER_OPTS=-Xmx2g`. For large projects, also set `sonar.scm.disabled=true` if SCM blame info is slow. Run scanner on a machine with at least 4GB RAM available. Exclude generated code with `sonar.exclusions`.",
+    "category": "general"
+  }
+]

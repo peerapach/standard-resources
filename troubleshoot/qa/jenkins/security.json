@@ -1,0 +1,8 @@
+[
+  {
+    "tags": ["credentials", "secret", "masked"],
+    "category": "security",
+    "q": "How do I pass secrets securely in a Jenkins pipeline without them appearing in logs?",
+    "a": "Use `withCredentials([string(credentialsId: 'my-secret', variable: 'MY_SECRET')]) { ... }`. Jenkins automatically masks the value in logs. Never use `echo $MY_SECRET` — use it only as an argument to a command."
+  }
+]

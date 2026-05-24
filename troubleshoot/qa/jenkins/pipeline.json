@@ -1,0 +1,20 @@
+[
+  {
+    "tags": ["build", "exit-code", "failure"],
+    "category": "pipeline",
+    "q": "My Jenkins pipeline fails with exit code 1 but I don't see an error message",
+    "a": "Look at the last shell step before the failure. Exit code 1 is a generic failure. Run the failing command locally with `set -x` to see each sub-command. Check if `set -e` is active (it stops on any error). Also check if a linter or test tool returned non-zero without printing to stdout."
+  },
+  {
+    "tags": ["shared-library", "groovy", "missing-method"],
+    "category": "pipeline",
+    "q": "Pipeline fails with groovy.lang.MissingMethodException for a shared library function",
+    "a": "The function doesn't exist in the library version being loaded. Check: 1) `@Library('my-lib@version')` — pin to a specific tag/branch. 2) The function is in `vars/` not `src/`. 3) The library is configured in Jenkins → System → Global Pipeline Libraries."
+  },
+  {
+    "tags": ["timeout", "hang", "infinite"],
+    "category": "pipeline",
+    "q": "My pipeline hangs and never finishes",
+    "a": "Wrap the build in a timeout: `timeout(time: 30, unit: 'MINUTES') { ... }`. Common causes: interactive prompt waiting for input (use `-y`/`--non-interactive` flags), docker pull rate limit, or a test that deadlocks. Check the build log for the last line printed before it hung."
+  }
+]
